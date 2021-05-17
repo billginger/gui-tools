@@ -26,7 +26,17 @@
       let jsonStr = '';
       let jsonTmp = '';
       txtArr.forEach(e => {
-        jsonTmp = `{label: '${e}', value: '${e}'},\n`;
+        // Remove spaces
+        jsonTmp = e.replace(/(^\s*)|(\s*$)/g, '');
+
+        // Handling single quotes
+        if (e.indexOf(`'`) >= 0) {
+          jsonTmp = `{label: "${jsonTmp}", value: "${jsonTmp}"},\n`;
+        } else {
+          jsonTmp = `{label: '${jsonTmp}', value: '${jsonTmp}'},\n`;
+        }
+
+        // Ignore blank lines and duplicate lines
         if (e.length && jsonStr.indexOf(jsonTmp) < 0) {
           jsonStr += jsonTmp;
         }
