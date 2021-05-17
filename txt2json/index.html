@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>txt2json</title>
+  <style>
+    textarea {
+      width: 48%;
+      height: 300px;
+    } 
+  </style> 
+</head>
+<body>
+  <div>
+    <textarea id="txt"></textarea>
+    <textarea id="json"></textarea>
+  </div>
+  <script>
+    const txtDom = document.querySelector('#txt');
+    const jsonDom = document.querySelector('#json');
+    const conversion = () => {
+      const txtVal = txtDom.value;
+      const txtArr = txtVal.split('\n');
+      let jsonStr = '';
+      let jsonTmp = '';
+      txtArr.forEach(e => {
+        jsonTmp = `{label: '${e}', value: '${e}'},\n`;
+        if (e.length && jsonStr.indexOf(jsonTmp) < 0) {
+          jsonStr += jsonTmp;
+        }
+      });
+      console.log(jsonStr);
+      jsonDom.value = jsonStr;
+    }
+    txtDom.addEventListener('input', conversion);
+  </script>
+</body>
+</html>
