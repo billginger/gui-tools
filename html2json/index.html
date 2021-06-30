@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>html2json</title>
+  <style>
+    textarea {
+      width: 48%;
+      height: 300px;
+    } 
+  </style> 
+</head>
+<body>
+  <div>
+    <textarea id="html"></textarea>
+    <textarea id="json"></textarea>
+  </div>
+  <script>
+    const htmlDom = document.querySelector('#html');
+    const jsonDom = document.querySelector('#json');
+    const conversion = () => {
+      const htmlVal = htmlDom.value;
+      const htmlArr = htmlVal.split('</li>');
+      let jsonStr = '';
+      let jsonTmp = '';
+      htmlArr.forEach(e => {
+        // Remove html tags
+        jsonTmp = e.replace(/<[^>]+>/g, '');
+
+        // Remove spaces
+        jsonTmp = jsonTmp.replace(/(^\s*)|(\s*$)/g, '');
+
+        // Handling single quotes
+        if (jsonTmp.indexOf(`'`) >= 0) {
+          jsonTmp = `{label: "${jsonTmp}", value: "${jsonTmp}"},\n`;
+        } else {
+          jsonTmp = `{label: '${jsonTmp}', value: '${jsonTmp}'},\n`;
+        }
+
+        // Ignore blank lines and duplicate lines
+        if (e.length && jsonStr.indexOf(jsonTmp) < 0) {
+          jsonStr += jsonTmp;
+        }
+      });
+      jsonDom.value = jsonStr;
+    }
+    htmlDom.addEventListener('input', conversion);
+  </script>
+</body>
+</html>
