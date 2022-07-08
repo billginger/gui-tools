@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>csv2json</title>
+  <style>
+    textarea {
+      width: 48%;
+      height: 300px;
+    } 
+  </style> 
+</head>
+<body>
+  <div>
+    <textarea id="csv"></textarea>
+    <textarea id="json"></textarea>
+  </div>
+  <script>
+    const csvDom = document.querySelector('#csv');
+    const jsonDom = document.querySelector('#json');
+    const conversion = () => {
+      const csvValue = csvDom.value;
+      const csvArray = csvValue.split('\n');
+      let jsonArray = [];
+      csvArray.forEach((value, index) => {
+        if (index == 0) {
+          jsonArray = value.split(',').map(v => (
+            `'${v}': [\n`
+          ));
+        } else {
+          value.split(',').forEach((v, i) => {
+            if (v.length) {
+              jsonArray[i] += `  '${v}',\n`;
+            }
+          });
+        }
+      });
+      jsonArray = jsonArray.map(value => (
+        `${value}]`
+      ));
+      jsonDom.value = jsonArray.join(',\n');
+    }
+    csvDom.addEventListener('input', conversion);
+  </script>
+</body>
+</html>
